@@ -1,0 +1,11 @@
+extends layout
+
+block content
+
+  div.container.starter-template
+    h1 Notes
+
+    div.content
+      each file in files 
+        p
+          a(href=file.path) #{file.title}

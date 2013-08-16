@@ -1,0 +1,25 @@
+!!!
+html(lang='en')
+  head
+    title= title
+    link(rel='stylesheet', href='/bootstrap/css/bootstrap.css')
+    -//link(rel='stylesheet', href='http://getbootstrap.com/dist/css/bootstrap.css')
+    -//link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    -//script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+    script(src='/bootstrap/js/bootstrap.js')
+  body
+    div.navbar.navbar-inverse.navbar-fixed-top
+      div.container
+        div.navbar-header
+          button.navbar-toggle(data-toggle='collapse', data-target='.navbar-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+           a.navbar-brand Tech Notes
+        div.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li#active
+              a(href='#') Home
+
+    block content
