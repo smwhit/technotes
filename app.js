@@ -29,6 +29,6 @@ app.get('/', function(req, res) {
 		res.render('index', {files: output});
 	}
 )});
-
-app.listen(8088); 
-console.log('Listening on port 8088');
+var port = process.env.PORT || 8088;
+app.listen(port); 
+console.log('Listening on port ' + port);
