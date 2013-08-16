@@ -3,9 +3,12 @@ extends layout
 block content
 
   div.container.starter-template
-    h1 Notes
+    h1 Technical Notes
 
     div.content
+    table.table-striped.table-bordered
+      th Article
       each file in files 
-        p
-          a(href=file.path) #{file.title}
+        tr
+          td 
+            a(href=file.path) #{file.title}

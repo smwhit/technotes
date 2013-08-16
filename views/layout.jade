@@ -2,11 +2,9 @@
 html(lang='en')
   head
     title= title
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
     link(rel='stylesheet', href='/bootstrap/css/bootstrap.css')
-    -//link(rel='stylesheet', href='http://getbootstrap.com/dist/css/bootstrap.css')
-    -//link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-    -//script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
     script(src='/bootstrap/js/bootstrap.js')
   body
     div.navbar.navbar-inverse.navbar-fixed-top
@@ -16,7 +14,7 @@ html(lang='en')
             span.icon-bar
             span.icon-bar
             span.icon-bar
-           a.navbar-brand Tech Notes
+           a.navbar-brand Technical Notes
         div.collapse.navbar-collapse
           ul.nav.navbar-nav
             li#active
