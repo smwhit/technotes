@@ -4,9 +4,9 @@ var watcher = chokidar.watch('public/markdown/', {ignored: /^\./, persistent: tr
 
 watcher
   //.on('add', function(path) { console.log('File', path, 'has been added');})
-  .on('add', add)
+  .on('add', fileAdded)
   //.on('change', function(path) {console.log('File', path, 'has been changed');})
-  .on('change', change)
+  .on('change', fileChanged)
   .on('unlink', function(path) {console.log('File', path, 'has been removed');})
   .on('error', function(error) {console.error('Error happened', error);})
 
@@ -16,16 +16,13 @@ watcher.on('change', function(path, stats) {
   console.log('File', path, 'changed size to', stats.size);
 });
 
-function add(path){
+function fileAdded(path){
 	console.log('File', path, 'has been added');
 }
 
-function change(path){
+function fileChanged(path){
 	console.log('File', path, 'has been changed');
 }
-
-//watcher.add('new-file');
-//watcher.add(['new-file-2', 'new-file-3']);
 
 // Only needed if watching is persistent.
 watcher.close();

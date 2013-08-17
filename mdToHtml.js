@@ -1,19 +1,34 @@
 var fs = require('fs');
 var marked = require('marked'); 
 var path = require('path');
+var chokidar = require('chokidar');
 
-var filePath = 'public/markdown/wpf-behaviors.md';
+var watcher = chokidar.watch('public/markdown/', {ignored: /^\./, persistent: true});
 
-//transformMarkdownToHtml(filePath);
-//var watchPath = path.dirname('markdown');
-var watchPath = path.dirname(__dirname + '/public/markdown/why');
+watcher
+  .on('add', fileAdded)
+  .on('change', fileChanged)
+  .on('unlink', function(path) {console.log('File', path, 'has been removed');})
+  .on('error', function(error) {console.error('Error happened', error);})
 
-console.log(watchPath);
-fs.watch( watchPath , function(event, targetfile){
-    console.log(path.normalize( targetfile ), 'is', event);
-    transformMarkdownToHtml(targetfile);
-    console.log('processed');
+// 'add' and 'change' events also receive stat() results as second argument.
+// http://nodejs.org/api/fs.html#fs_class_fs_stats
+watcher.on('change', function(path, stats) {
+  console.log('File', path, 'changed size to', stats.size);
 });
+
+function fileAdded(path){
+	console.log('File', path, 'has been added');
+	transformMarkdownToHtml(path);
+}
+
+function fileChanged(path){
+	console.log('File', path, 'has been changed');
+	transformMarkdownToHtml(path);
+}
+
+// Only needed if watching is persistent.
+watcher.close();
 
 function transformMarkdownToHtml(filePath)
 {
