@@ -16,6 +16,7 @@ app.set('view options', {'layout': false});
 // });
 
 app.get('/', function(req, res) {
+	console.log(process.env.SECRET);
 	fs.readdir('public', function(error, files) {
 		var output = [];
 		for(var i = 0 ; i < files.length; i++)
@@ -25,7 +26,7 @@ app.get('/', function(req, res) {
 				output.push({path : files[i], title: files[i].split('.')[0]});
 			}
 		}
-		res.render('index', {files: output, title: "Tech Notes"});
+		res.render('index', {files: output, title: "Tech Notes", secret: process.env.SECRET});
 	}
 )});
 
