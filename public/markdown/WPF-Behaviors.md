@@ -1,6 +1,6 @@
 #Behaviors
 
-##References s
+##References
 - http://wpftutorial.net/Behaviors.html 
 - http://www.codeproject.com/Articles/28959/Introduction-to-Attached-Behaviors-in-WPF
 
