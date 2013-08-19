@@ -8,6 +8,8 @@ var repoPath = "public/markdown";
 var repoName = "technotes";
 var user = "smwhit";
 
+github.authenticate({ type:"basic", username:"smwhit", password:process.env.github_pw});
+
 var content = github.repos.getContent({user:user, repo:repoName, path:repoPath}, 
 		function(err, resp){
 			if(err) { 
@@ -24,6 +26,8 @@ var content = github.repos.getContent({user:user, repo:repoName, path:repoPath},
 	}
 );
 
+console.log(content);
+
 var saveFile = function(err, resp, callback) {
 	if(err) console.log(err);
 	else {
@@ -35,10 +39,10 @@ var saveFile = function(err, resp, callback) {
 function transformMarkdownToHtml(err, filePath)
 {
 	var fileName = repoPath + '/' + path.basename(filePath);
-	console.log(filePath);
+	console.log(fileName);
 
-	var htmlFileName = fileName.split('.')[0] + '.html';
-	//console.log(htmlFileName);
+	var htmlFileName = filePath.split('.')[0] + '.html';
+	console.log(htmlFileName);
 
 	var fileContents = fs.readFileSync(fileName, 'utf-8');
 	var htmlFromMd = marked(fileContents);
