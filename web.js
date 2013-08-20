@@ -1,15 +1,17 @@
 var express = require('express'); 
-var app = express(); 
 var path = require('path');
 var jade = require('jade');
 var fs = require('fs');
 var githubApi = require('github');
+var path = require('path');
+var marked = require('marked');
+
 var github = new githubApi({ version:'3.0.0', timeout: 5000});
 var repoPath = "public/markdown";
 var repoName = "technotes";
 var user = "smwhit";
-var path = require('path');
-var marked = require('marked');
+
+var app = express(); 
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'jade');
@@ -17,33 +19,33 @@ app.set('view options', {'layout': false});
 
 github.authenticate({ type:"basic", username:"smwhit", password:process.env.github_pw});
 
-var updateHtmlFromMarkdown = function(){
+var updateHtmlFromMarkdown = function(callback) {
 		github.repos.getContent({user:user, repo:repoName, path:repoPath}, 
 		function(err, resp){
 			if(err) { 
 				console.log('error: ' + err);
+				callback(err);
 			}
 			else {
-				var filenames = [];
 				for (var i = 0; i < resp.length; i++) {
-					filenames.push(resp[i].name);
+					console.log(resp[i].name);
 					getFileFromGitHubAsString(resp[i].name, saveFile);
 				};
+				callback(null, "All done");
 			}
 		}
 )};
 
+updateHtmlFromMarkdown(function(err, resp){
+	console.log('init complete');
+});
+
 function transformMarkdownToHtml(err, filePath)
 {
 	var fileName = repoPath + '/' + path.basename(filePath);
-	console.log(fileName);
-
 	var htmlFileName = filePath.split('.')[0] + '.html';
-	console.log(htmlFileName);
-
 	var fileContents = fs.readFileSync(fileName, 'utf-8');
 	var htmlFromMd = marked(fileContents);
-
 	fs.writeFileSync('public/' + htmlFileName, htmlFromMd);
 }
 
@@ -64,7 +66,7 @@ var getFileFromGitHubAsString = function(filename, callback) {
 };
 
 var saveFile = function(err, resp, callback) {
-	if(err) console.log(err);
+	if(err) callback(err, null);
 	else {
 		fs.writeFileSync('public/markdown/' + resp.name, resp.text);
 		callback(null, resp.name);
@@ -72,7 +74,6 @@ var saveFile = function(err, resp, callback) {
 };
 
 app.get('/', function(req, res) {
-	console.log(process.env.SECRET);
 	fs.readdir('public', function(error, files) {
 		var output = [];
 		for(var i = 0 ; i < files.length; i++)
@@ -86,12 +87,15 @@ app.get('/', function(req, res) {
 	}
 )});
 
-app.post('/update', function(req, res) {
+app.post('/update', function(req, res, callback) {
 	console.log('post!');
-	updateHtmlFromMarkdown();
+	updateHtmlFromMarkdown(function(done){
+		console.log(done);
+		res.send(done);
+		res.send('updated ok\n', 200);
+	});
 
-	res.send('fu', 200);
-	//res.end();
+	// res.send('updated ok\n', 200);
 });
 
 var port = process.env.PORT || 8088;
